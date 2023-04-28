@@ -4,6 +4,7 @@ import websockets
 
 ## Main declarations
 h = "https://"
+out = "out/output.txt"
 sites = [
     "amazon.fr",
     "ebay.de"
@@ -67,8 +68,6 @@ async def main():
     #   Mainloop
     for proxy in proxies:
         if len(data) != len(sites):
-            if parameters["debug"]:
-                print(f"→ Trying proxy {idx}: {proxy}")
             credentials = get_proxy_credentials(proxy)
             #   Browser arguments for proxy use
             browser_args = {}
@@ -84,9 +83,14 @@ async def main():
                 ]
             #   Scraping
             browser = await launch(headless=parameters["head"], **browser_args)
+            
             try:
                 ws_url = browser.wsEndpoint # Documentation: https://pptr.dev/ for func details
                                             # else https://github.com/pyppeteer/pyppeteer for python version
+                #   Debug
+                if parameters["debug"]:
+                    print(f"→ Trying proxy {idx}: {proxy}")
+                    
                 async with websockets.connect(ws_url) as ws:
                     for site in sites:
                         if not (site in data):
@@ -117,11 +121,11 @@ if __name__ == "__main__":
     # print(f"Data output:\n {data}\n", len(data)) -- Deprecated and annoying to read in console
 
     #   Write data to file
-    with open("out/output.txt", "w") as file:
+    with open(out, "w") as file:
         file.write(str(data))
 
     #   UI: End
     print("============================= Done =============================")
 
-    print("→ Data has been exported to directory '../out/output.txt'.")
+    print(f"→ Data has been exported to directory '../{out}'.")
     input("/!\ Scraping has finished. Press Enter to exit...    ")

@@ -3,6 +3,7 @@ from pyppeteer import launch
 
 ## Main declarations
 h = "https://"
+out = "out/output_no_proxies.txt"
 sites = [
     "amazon.fr",
     "ebay.de"
@@ -85,11 +86,11 @@ if __name__ == "__main__":
     # print(f"Data output:\n {data}\n", len(data)) -- Deprecated and annoying to read in console
 
     #   Write data to file
-    with open("out/output_no_proxies.txt", "w") as file:
+    with open(out, "w") as file:
         file.write(str(data))
 
     #   UI: End
     print("============================= Done =============================")
 
-    print("→ Data has been exported to directory '../out/output_no_proxies.txt'.")
+    print(f"→ Data has been exported to directory '../{out}'.")
     input("/!\ Scraping has finished. Press Enter to exit...    ")
