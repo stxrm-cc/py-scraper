@@ -1,9 +1,11 @@
 import asyncio
 from pyppeteer import launch
+import json
 
 ## Main declarations
 h = "https://"
-out = "out/output_no_proxies.txt"
+out = "out/output.json"
+out_logs = "out/logs.json"
 sites = [
     "amazon.fr",
     "ebay.de"
@@ -17,6 +19,9 @@ user_answers = {
     "no": False,
     "f": False,
     "false": False
+}
+logs = {
+    "errors": []
 }
 
 ##  Helpers
@@ -65,7 +70,7 @@ async def main():
                 page = await browser.newPage()
                 await page.goto(h + site)
                 current_data = await page.content()
-                data[site] = current_data
+                data[site] = {"data": current_data}
                 await page.close()
 
                 # Success response
@@ -74,6 +79,8 @@ async def main():
             #   Error handling
             except Exception as e:
                 print(f"    • Caught exception: {e}")
+                logs["errors"].append(str(e))
+                
             #   End
             finally:
                 await browser.close()
@@ -83,14 +90,18 @@ async def main():
 #   to prevent execution from other files since im gonna import this file as a module probably
 if __name__ == "__main__":
     data = asyncio.get_event_loop().run_until_complete(main())
-    # print(f"Data output:\n {data}\n", len(data)) -- Deprecated and annoying to read in console
-
+    
+    print(data)
     #   Write data to file
     with open(out, "w") as file:
-        file.write(str(data))
+        file.write(json.dumps(data, indent=4))
+
+    #   Error logs
+    with open(out_logs, "w") as file:
+        file.write(json.dumps(logs, indent=4))
 
     #   UI: End
     print("============================= Done =============================")
 
-    print(f"→ Data has been exported to directory '../{out}'.")
+    print(f"→ Data has been exported to directory '../{out}'.\n→ Logs have been exported to directory '../{out_logs}'.")
     input("/!\ Scraping has finished. Press Enter to exit...    ")
