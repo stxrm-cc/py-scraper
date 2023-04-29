@@ -4,8 +4,8 @@ import json
 
 ## Main declarations
 h = "https://"
-out = "out/output.json"
-out_logs = "out/logs.json"
+out = "out/output_no_proxies.json"
+out_logs = "out/logs_no_proxies.json"
 sites = [
     "amazon.fr",
     "ebay.de"
@@ -91,7 +91,6 @@ async def main():
 if __name__ == "__main__":
     data = asyncio.get_event_loop().run_until_complete(main())
     
-    print(data)
     #   Write data to file
     with open(out, "w") as file:
         file.write(json.dumps(data, indent=4))

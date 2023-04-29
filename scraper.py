@@ -44,11 +44,11 @@ def get_debug_value():
         print("Invalid input. Please enter y/n.")
 
 def get_proxy_credentials(proxy):
-    #   Arbitrary 
+    #   Arbitrary format: address:port@username:password
     parts = proxy.split("@")
     if len(parts) == 2:
         #   Converting to tuple for formatting
-        return tuple(parts[0].split(":"))
+        return parts[0], tuple(parts[1].split(":"))
     return None
 
 ##  Main
@@ -79,8 +79,8 @@ async def main():
             if credentials:
                 #   Authentication
                 browser_args["args"] = [
-                    f"--proxy-server={proxy}",
-                    f"--proxy-auth={credentials[0]}:{credentials[1]}"
+                    f"--proxy-server={credentials[0]}",
+                    f"--proxy-auth={credentials[1][0]}:{credentials[1][1]}"
                 ]
             else:
                 browser_args["args"] = [
@@ -112,7 +112,7 @@ async def main():
             #   Error handling
             except Exception as e:
                 print(f"    • Caught exception: {e}")
-                logs["errors"].append(str(e))
+                logs["errors"].append({str(proxy): str(e)})
                 
             #   End
             finally:

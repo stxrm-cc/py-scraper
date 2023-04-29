@@ -1,3 +1,16 @@
 {
-    "errors": []
+    "errors": [
+        {
+            "64.225.4.12:9976": "net::ERR_CONNECTION_TIMED_OUT at https://amazon.fr"
+        },
+        {
+            "157.245.27.9:3128": "net::ERR_EMPTY_RESPONSE at https://amazon.fr"
+        },
+        {
+            "91.107.235.240:8080": "net::ERR_CONNECTION_TIMED_OUT at https://amazon.fr"
+        },
+        {
+            "65.108.48.232:8080": "net::ERR_CONNECTION_TIMED_OUT at https://amazon.fr"
+        }
+    ]
 }
